@@ -14,12 +14,11 @@ namespace MyMvvm.Tests
         #region subscribing tests...
 
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public async Task A_null_subscriber_causes_an_ArgumentNullException()
         {
             var dispatcher = Substitute.For<IDispatcher>();
             var eventAggregator = new MessageAggregator(dispatcher);
-            await eventAggregator.SubscribeAsync(null);
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await eventAggregator.SubscribeAsync(null));
         }
 
         [Test]
@@ -41,12 +40,11 @@ namespace MyMvvm.Tests
         #region unsubscribing tests...
 
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public async Task A_null_unsubscriber_causes_an_ArgumentNullException()
         {
             var dispatcher = Substitute.For<IDispatcher>();
             var eventAggregator = new MessageAggregator(dispatcher);
-            await eventAggregator.UnsubscribeAsync(null);
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await eventAggregator.UnsubscribeAsync(null));
         }
 
         [Test]
@@ -68,13 +66,12 @@ namespace MyMvvm.Tests
         #region publishing tests...
 
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public async Task A_null_message_causes_an_ArgumentNullException()
         {
             var dispatcher = Substitute.For<IDispatcher>();
             var eventAggregator = new MessageAggregator(dispatcher);
 
-            await eventAggregator.PublishAsync(null);
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await eventAggregator.PublishAsync(null));
         }
 
         [Test]
