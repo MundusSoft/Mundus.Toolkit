@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MyMvvm
+namespace MToolkit
 {
     /// <summary>
     /// Static class responsible for holding the extension methods for <see cref="object"/>.

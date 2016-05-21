@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 
-namespace MyMvvm.Threading
+namespace MToolkit.Threading
 {
     /// <summary>
     ///  A <see cref="IDispatcher" /> implementation for the Windows Universal applications.

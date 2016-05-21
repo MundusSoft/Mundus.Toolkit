@@ -1,24 +1,24 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMvvm.Contracts", "MyMvvm.Contracts\MyMvvm.Contracts.csproj", "{3573CC74-0076-4D90-A08B-22FACBB0E389}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MToolkit.Contracts", "MToolkit.Contracts\MToolkit.Contracts.csproj", "{3573CC74-0076-4D90-A08B-22FACBB0E389}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution Files", "{B5FD44A3-01CB-4726-9DC5-3983E7D22BF8}"
 	ProjectSection(SolutionItems) = preProject
 		Solution Files\SolutionInfo.cs = Solution Files\SolutionInfo.cs
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMvvm", "MyMvvm\MyMvvm.csproj", "{F1BE0B49-58E8-4F65-A767-5027CADEACFF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MToolkit", "MToolkit\MToolkit.csproj", "{F1BE0B49-58E8-4F65-A767-5027CADEACFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMvvm.NET45", "MyMvvm.NET45\MyMvvm.NET45.csproj", "{6074711F-E082-472D-94EE-3AF9BF3D725B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MToolkit.Net", "MToolkit.NET\MToolkit.Net.csproj", "{6074711F-E082-472D-94EE-3AF9BF3D725B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A7ADB856-4E69-45F9-909F-3FB390927E0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMvvm.Tests", "Tests\MyMvvm.Tests\MyMvvm.Tests.csproj", "{3618AE3D-A788-4B7E-BD33-FAD964EA455F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MToolkit.Tests", "Tests\MToolkit.Tests\MToolkit.Tests.csproj", "{3618AE3D-A788-4B7E-BD33-FAD964EA455F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMvvm.Universal", "MyMvvm.Universal\MyMvvm.Universal.csproj", "{F2548E68-5608-4DF3-A7E9-41474E8316A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MToolkit.Windows", "MToolkit.Windows\MToolkit.Windows.csproj", "{F2548E68-5608-4DF3-A7E9-41474E8316A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

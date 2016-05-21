@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using MyMvvm.Threading;
+using MToolkit.Threading;
 
-namespace MyMvvm.Messaging
+namespace MToolkit.Messaging
 {
     /// <summary>
     ///     Implementation of <see cref="IMessageAggregator" /> that enables

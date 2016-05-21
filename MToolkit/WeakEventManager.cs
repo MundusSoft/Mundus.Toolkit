@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MyMvvm
+namespace MToolkit
 {
     /// <summary>
     ///     Static Class that holds the extension methods to handle events using weak references and actions.

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using MyMvvm.Messaging;
-using MyMvvm.Threading;
+using MToolkit.Messaging;
+using MToolkit.Threading;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace MyMvvm.Tests
+namespace MToolkit.Tests
 {
     [TestFixture]
     public class MessageAggregatorTests

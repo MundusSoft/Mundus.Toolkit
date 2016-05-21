@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MyMvvm
+namespace MToolkit.Threading
 {
     /// <summary>
     ///     Class responsible for implementing async locks.

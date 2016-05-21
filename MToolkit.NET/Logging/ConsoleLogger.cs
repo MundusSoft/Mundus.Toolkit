@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MyMvvm.Logging
+namespace MToolkit.Logging
 {
     /// <summary>
     ///     Logger class that will log messages into the console.

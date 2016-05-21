@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyMvvm.Logging
+namespace MToolkit.Logging
 {
     /// <summary>
     /// <c>Enum</c> with all the possible log levels.

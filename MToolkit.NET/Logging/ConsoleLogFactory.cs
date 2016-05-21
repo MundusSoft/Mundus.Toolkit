@@ -4,9 +4,9 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MyMvvm.Configuration;
+using MToolkit.Configuration;
 
-namespace MyMvvm.Logging
+namespace MToolkit.Logging
 {
     /// <summary>
     /// Console Log factory class 

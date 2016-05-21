@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace MyMvvm
+namespace MToolkit
 {
     /// <summary>
     ///     Class holding extension methods for <see cref="IEnumerable" />.

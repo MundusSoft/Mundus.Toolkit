@@ -1,6 +1,6 @@
-﻿using MyMvvm.Presenters;
+﻿using MToolkit.Presenters;
 
-namespace MyMvvm.Navigation
+namespace MToolkit.Navigation
 {
     /// <summary>
     /// An interface defining how navigation between views should be performed.

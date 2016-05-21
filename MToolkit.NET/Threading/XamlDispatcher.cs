@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
-namespace MyMvvm.Threading
+namespace MToolkit.Threading
 {
     /// <summary>
     ///     A <see cref="IDispatcher" /> implementation for the XAML 4.5+ platform.

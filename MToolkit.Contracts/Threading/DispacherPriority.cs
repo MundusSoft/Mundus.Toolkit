@@ -1,4 +1,5 @@
-﻿namespace MyMvvm.Threading
+﻿
+namespace MToolkit.Threading
 {
     /// <summary>
     ///     Defines the priorities at which operations can be invoked by way of the <see cref="IDispatcher" />.

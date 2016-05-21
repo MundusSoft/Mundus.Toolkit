@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
+using MToolkit.Threading;
 using NUnit.Framework;
 
-namespace MyMvvm.Tests
+namespace MToolkit.Tests
 {
     [TestFixture]
     public class AsyncLockTests

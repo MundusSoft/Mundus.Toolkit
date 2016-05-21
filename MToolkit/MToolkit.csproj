@@ -8,8 +8,8 @@
     <ProjectGuid>{F1BE0B49-58E8-4F65-A767-5027CADEACFF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MyMvvm</RootNamespace>
-    <AssemblyName>MyMvvm</AssemblyName>
+    <RootNamespace>MToolkit</RootNamespace>
+    <AssemblyName>MToolkit</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -79,9 +79,9 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <ProjectReference Include="..\MyMvvm.Contracts\MyMvvm.Contracts.csproj">
+    <ProjectReference Include="..\MToolkit.Contracts\MToolkit.Contracts.csproj">
       <Project>{3573CC74-0076-4D90-A08B-22FACBB0E389}</Project>
-      <Name>MyMvvm.Contracts</Name>
+      <Name>MToolkit.Contracts</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

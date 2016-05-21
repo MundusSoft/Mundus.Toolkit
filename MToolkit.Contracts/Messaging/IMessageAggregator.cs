@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace MyMvvm.Messaging
+namespace MToolkit.Messaging
 {
     /// <summary>
     ///   Enables loosely-coupled publication of and subscription to events asynchronous.

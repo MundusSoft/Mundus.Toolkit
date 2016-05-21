@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace MyMvvm.Navigation
+namespace MToolkit.Navigation
 {
     /// <summary>
     /// An interface defining how navigation between presenters should be performed asynchronous.

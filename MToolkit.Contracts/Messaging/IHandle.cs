@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace MyMvvm.Messaging
+namespace MToolkit.Messaging
 {
     /// <summary>
     ///     An <see langword="interface" /> for classes that subscribe to messages.

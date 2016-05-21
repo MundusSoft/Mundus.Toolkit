@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MyMvvm
+namespace MToolkit
 {
     public static class DateTimeExtensionMethods
     {

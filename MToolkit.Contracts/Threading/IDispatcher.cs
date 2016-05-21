@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace MyMvvm.Threading
+namespace MToolkit.Threading
 {
     /// <summary>
     /// Interface for UI Dispatcher that will execute <seealso cref="Action"/> in the UI Thread.

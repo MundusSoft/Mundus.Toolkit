@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyMvvm.Configuration
+namespace MToolkit.Configuration
 {
     /// <summary>
     /// Interface that resolves the settings for the application. 

@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Alexandre Palma")]
-[assembly: AssemblyProduct("MyMvvm")]
-[assembly: AssemblyCopyright("Copyright © 2015 Alexandre Palma all rights reserved.")]
+[assembly: AssemblyCompany("MundusSoft, LLC")]
+[assembly: AssemblyProduct("MToolkit")]
+[assembly: AssemblyCopyright("Copyright © 2016 MundusSoft, LLC all rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en")]

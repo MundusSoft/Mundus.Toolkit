@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using MyMvvm.Threading;
 
-namespace MyMvvm
+namespace MToolkit.Threading
 {
     /// <summary>
     /// Default implementation for <see cref="IDispatcher"/> that isn't bound to any platform.

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyMvvm.Logging
+namespace MToolkit.Logging
 {
     /// <summary>
     /// Logging API for this framework. The user can inject his own implementation by setting the <see cref="LogManager.LogFactory"/> static property.

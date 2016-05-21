@@ -7,8 +7,8 @@
     <ProjectGuid>{3618AE3D-A788-4B7E-BD33-FAD964EA455F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MyMvvm.Tests</RootNamespace>
-    <AssemblyName>MyMvvm.Tests</AssemblyName>
+    <RootNamespace>MToolkit.Tests</RootNamespace>
+    <AssemblyName>MToolkit.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -68,17 +68,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MyMvvm.Contracts\MyMvvm.Contracts.csproj">
+    <ProjectReference Include="..\..\MToolkit.Contracts\MToolkit.Contracts.csproj">
       <Project>{3573CC74-0076-4D90-A08B-22FACBB0E389}</Project>
-      <Name>MyMvvm.Contracts</Name>
+      <Name>MToolkit.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MyMvvm.NET45\MyMvvm.NET45.csproj">
+    <ProjectReference Include="..\..\MToolkit.NET\MToolkit.Net.csproj">
       <Project>{6074711F-E082-472D-94EE-3AF9BF3D725B}</Project>
-      <Name>MyMvvm.NET45</Name>
+      <Name>MToolkit.Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MyMvvm\MyMvvm.csproj">
+    <ProjectReference Include="..\..\MToolkit\MToolkit.csproj">
       <Project>{F1BE0B49-58E8-4F65-A767-5027CADEACFF}</Project>
-      <Name>MyMvvm</Name>
+      <Name>MToolkit</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
