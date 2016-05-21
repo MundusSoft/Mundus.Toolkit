@@ -61,7 +61,7 @@ namespace MyMvvm.Threading
         {
             ValidateDispatcher();
             var execPriority = GetDispatcherPriority(priority);
-            await dispatcher.InvokeAsync(function, execPriority);
+            await dispatcher.Invoke(function, execPriority);
         }
 
         #endregion

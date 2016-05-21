@@ -42,15 +42,17 @@ namespace MyMvvm.Messaging
 
                 var interfaces = handler.GetType().GetTypeInfo().ImplementedInterfaces
                                         .Where(x =>
-                                               typeof (IHandleAsync).GetTypeInfo().IsAssignableFrom(x.GetTypeInfo()) &&
-                                               x.GetTypeInfo().IsGenericType);
+                                               (typeof (IHandleAsync).GetTypeInfo().IsAssignableFrom(x.GetTypeInfo()) 
+                                               || typeof(IHandle).GetTypeInfo().IsAssignableFrom(x.GetTypeInfo()))
+                                               && x.GetTypeInfo().IsGenericType).ToList();
 
-                foreach (var @interface in interfaces)
-                {
-                    var type = @interface.GetTypeInfo().GenericTypeArguments[0];
-                    var method = @interface.GetRuntimeMethod("HandleAsync", new[] {type});
-                    supportedHandlers[type] = method;
-                }
+                interfaces.ForEach(@interface =>
+                                   {
+                                       var type = @interface.GetTypeInfo().GenericTypeArguments[0];
+                                       var method = @interface.GetRuntimeMethod("HandleAsync", new[] {type})
+                                                    ?? @interface.GetRuntimeMethod("Handle", new[] {type});
+                                       supportedHandlers[type] = method;
+                                   });
             }
 
             /// <summary>
@@ -248,7 +250,7 @@ namespace MyMvvm.Messaging
         /// <param name="message">The message instance.</param>
         public async Task PublishOnUIThreadAsync(object message)
         {
-            await dispatcher.InvokeOnUIThreadAsync(async () => await PublishAsync(message));
+            await dispatcher.InvokeOnUIThreadAsync(async ()=> await PublishAsync(message));
         }
 
         #endregion

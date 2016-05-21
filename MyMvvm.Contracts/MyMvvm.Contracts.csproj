@@ -85,6 +85,7 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Configuration\ISettings.cs" />
+    <Compile Include="Messaging\IHandle.cs" />
     <Compile Include="Messaging\IMessageAggregator.cs" />
     <Compile Include="Presenters\IPresenter.cs" />
     <Compile Include="Messaging\IHandleAsync.cs" />
