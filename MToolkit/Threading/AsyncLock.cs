@@ -27,9 +27,9 @@ namespace MToolkit.Threading
         ///     <see cref="LockSubscription" /> gets disposed.
         /// </summary>
         /// <returns><see cref="LockSubscription" /> responsible for releasing the async lock.</returns>
-        public Task<LockSubscription> LockAsync()
+        public async Task<LockSubscription> LockAsync()
         {
-            return LockAsync(TaskScheduler.Default);
+            return await LockAsync(TaskScheduler.Default);
         }
 
         /// <summary>
@@ -37,7 +37,17 @@ namespace MToolkit.Threading
         ///     <see cref="LockSubscription" /> gets disposed.
         /// </summary>
         /// <returns><see cref="LockSubscription" /> responsible for releasing the async lock.</returns>
-        public Task<LockSubscription> LockAsync(TaskScheduler taskScheduler)
+        public async Task<LockSubscription> LockAsync(TaskScheduler taskScheduler)
+        {
+            return await LockAsync(taskScheduler, CancellationToken.None);
+        }
+
+        /// <summary>
+        ///     Creates a async <c>lock</c> using the <paramref name="taskScheduler" /> that will exist until the returned
+        ///     <see cref="LockSubscription" /> gets disposed.
+        /// </summary>
+        /// <returns><see cref="LockSubscription" /> responsible for releasing the async lock.</returns>
+        public Task<LockSubscription> LockAsync(TaskScheduler taskScheduler, CancellationToken token)
         {
             if (taskScheduler == null)
             {

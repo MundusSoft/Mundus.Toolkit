@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using MToolkit.Threading;
 
@@ -40,19 +42,18 @@ namespace MToolkit.Messaging
             {
                 reference = new WeakReference(handler);
 
-                var interfaces = handler.GetType().GetTypeInfo().ImplementedInterfaces
-                                        .Where(x =>
-                                               (typeof (IHandleAsync).GetTypeInfo().IsAssignableFrom(x.GetTypeInfo()) 
-                                               || typeof(IHandle).GetTypeInfo().IsAssignableFrom(x.GetTypeInfo()))
-                                               && x.GetTypeInfo().IsGenericType).ToList();
-
-                interfaces.ForEach(@interface =>
-                                   {
-                                       var type = @interface.GetTypeInfo().GenericTypeArguments[0];
-                                       var method = @interface.GetRuntimeMethod("HandleAsync", new[] {type})
-                                                    ?? @interface.GetRuntimeMethod("Handle", new[] {type});
-                                       supportedHandlers[type] = method;
-                                   });
+                handler.GetType().GetTypeInfo().ImplementedInterfaces
+                       .Where(x =>
+                              (typeof(IHandleAsync).GetTypeInfo().IsAssignableFrom(x.GetTypeInfo())
+                               || typeof(IHandle).GetTypeInfo().IsAssignableFrom(x.GetTypeInfo()))
+                              && x.GetTypeInfo().IsGenericType)
+                       .ForEach(@interface =>
+                                {
+                                    var type = @interface.GetTypeInfo().GenericTypeArguments[0];
+                                    var method = @interface.GetRuntimeMethod("HandleAsync", new[] {type})
+                                                 ?? @interface.GetRuntimeMethod("Handle", new[] {type});
+                                    supportedHandlers[type] = method;
+                                });
             }
 
             /// <summary>
@@ -116,28 +117,10 @@ namespace MToolkit.Messaging
 
         private readonly AsyncLock asyncLock = new AsyncLock();
         private readonly List<Handler> handlers = new List<Handler>();
-        private readonly IDispatcher dispatcher;
 
         #endregion
 
-        #region contructors...
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="MessageAggregator" /> class.
-        /// </summary>
-        /// <param name="dispatcher">The <see cref="IDispatcher" /> to be use when publishing messages.</param>
-        public MessageAggregator(IDispatcher dispatcher)
-        {
-            if (dispatcher == null)
-            {
-                throw new ArgumentNullException(nameof(dispatcher));
-            }
-            this.dispatcher = dispatcher;
-        }
-
-        #endregion
-
-        #region IEventAggregator implementation...
+        #region IMessageAggregator implementation...
 
         /// <summary>
         ///     Searches the subscribed handlers to check if we have a handler for
@@ -161,11 +144,22 @@ namespace MToolkit.Messaging
         /// <param name="subscriber">The instance to subscribe for event publication.</param>
         public async Task SubscribeAsync(object subscriber)
         {
+            await SubscribeAsync(subscriber, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Subscribes an instance to all events declared through implementations of <see cref="IHandleAsync{TMessage}" /> asynchronous.
+        /// </summary>
+        /// <param name="subscriber">The instance to subscribe for event publication.</param>
+        /// <param name="token">The <see cref="CancellationToken"/>.</param>
+        /// <returns></returns>
+        public async Task SubscribeAsync(object subscriber, CancellationToken token)
+        {
             if (subscriber == null)
             {
                 throw new ArgumentNullException(nameof(subscriber));
             }
-            using (await GetLockAsync())
+            using (await GetLockAsync(token))
             {
                 var handler = handlers.FirstOrDefault(x => x.Matches(subscriber));
                 if (handler != null)
@@ -183,15 +177,25 @@ namespace MToolkit.Messaging
         /// <param name="subscriber">The instance to unsubscribe.</param>
         public async Task UnsubscribeAsync(object subscriber)
         {
+            await UnsubscribeAsync(subscriber, CancellationToken.None);
+        }
+
+        /// <summary>
+        ///   Unsubscribe the instance from all events asynchronous.
+        /// </summary>
+        /// <param name = "subscriber">The instance to unsubscribe.</param>
+        /// <param name="token">The <see cref="CancellationToken"/>.</param>
+        public async Task UnsubscribeAsync(object subscriber, CancellationToken token)
+        {
             if (subscriber == null)
             {
                 throw new ArgumentNullException(nameof(subscriber));
             }
-            using (await GetLockAsync())
+            using (await GetLockAsync(token))
             {
                 var handler = handlers.FirstOrDefault(x => x.Matches(subscriber));
 
-                if (handler == null)
+                if (handler == null || token.IsCancellationRequested)
                 {
                     return;
                 }
@@ -205,52 +209,51 @@ namespace MToolkit.Messaging
         /// <param name="message">The message instance.</param>
         public async Task PublishAsync(object message)
         {
+            await PublishAsync(message, CancellationToken.None);
+        }
+
+        /// <summary>
+        ///   Publishes a message on the current thread asynchronous.
+        /// </summary>
+        /// <param name = "message">The message instance.</param>
+        /// <param name="token">The <see cref="CancellationToken"/>.</param>
+        public async Task PublishAsync(object message, CancellationToken token)
+        {
             if (message == null)
             {
                 throw new ArgumentNullException(nameof(message));
             }
             Handler[] toNotify;
-            using (await GetLockAsync())
+            using (await GetLockAsync(token))
             {
                 toNotify = handlers.ToArray();
             }
-
-            var messageType = message.GetType();
-            var dead = new List<Handler>();
-            foreach (var handler in toNotify)
-            {
-                if (!await handler.HandleAsync(messageType, message))
-                {
-                    dead.Add(handler);
-                }
-            }
-
-            if (!dead.Any())
+            if (token.IsCancellationRequested)
             {
                 return;
             }
-            using (await GetLockAsync())
+            var messageType = message.GetType();
+            var dead = new ConcurrentBag<Handler>();
+            await toNotify.ForEachAsync(async handler =>
+                                              {
+                                                  if (!await handler.HandleAsync(messageType, message))
+                                                  {
+                                                      if (token.IsCancellationRequested)
+                                                      {
+                                                          return;
+                                                      }
+                                                      dead.Add(handler);
+                                                  }
+                                              },
+                                        token);
+            if (!dead.Any() )
+            {
+                return;
+            }
+            using (await GetLockAsync(token))
             {
                 dead.ForEach(x => handlers.Remove(x));
             }
-        }
-
-        /// <summary>
-        ///     Publishes a message on a background thread asynchronous.
-        /// </summary>
-        /// <param name="message">The message instance.</param>
-        public async Task PublishOnBackgroundThreadAsync(object message)
-        {
-            await PublishAsync(message).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        ///     Publishes a message on the UI thread asynchronous.
-        /// </summary>
-        /// <param name="message">The message instance.</param>
-        public async Task PublishOnUIThreadAsync(object message)
-        {
-            await dispatcher.InvokeOnUIThreadAsync(async ()=> await PublishAsync(message));
         }
 
         #endregion
@@ -267,13 +270,36 @@ namespace MToolkit.Messaging
         }
 
         /// <summary>
+        ///     Gets a asynchronous lock using <see cref="TaskScheduler.Default" />.
+        /// </summary>
+         /// <param name="token">The <see cref="CancellationToken"/>.</param>
+       /// <returns>An awaitable <see cref="Task{T}" /> of <see cref="AsyncLock.LockSubscription" /></returns>
+        private async Task<AsyncLock.LockSubscription> GetLockAsync(CancellationToken token)
+        {
+            return await GetLockAsync(TaskScheduler.Default, token).ConfigureAwait(false);
+        }
+
+        /// <summary>
         ///     Gets a asynchronous lock.
         /// </summary>
         /// <param name="taskScheduler">A <see cref="TaskScheduler" />.</param>
         /// <returns>An awaitable <see cref="Task{T}" /> of <see cref="AsyncLock.LockSubscription" /></returns>
         private async Task<AsyncLock.LockSubscription> GetLockAsync(TaskScheduler taskScheduler)
         {
-            return await asyncLock.LockAsync(taskScheduler).ConfigureAwait(false);
+            return await GetLockAsync(taskScheduler, CancellationToken.None).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Gets a asynchronous lock.
+        /// </summary>
+        /// <param name="taskScheduler">A <see cref="TaskScheduler" />.</param>
+        /// <param name="token">The <see cref="CancellationToken"/>.</param>
+        /// <returns>
+        /// An awaitable <see cref="Task{T}" /> of <see cref="AsyncLock.LockSubscription" />
+        /// </returns>
+        private async Task<AsyncLock.LockSubscription> GetLockAsync(TaskScheduler taskScheduler, CancellationToken token)
+        {
+            return await asyncLock.LockAsync(taskScheduler, token).ConfigureAwait(false);
         }
 
         #endregion

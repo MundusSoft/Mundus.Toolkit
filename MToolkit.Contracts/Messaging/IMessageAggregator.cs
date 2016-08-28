@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MToolkit.Messaging
@@ -23,10 +24,25 @@ namespace MToolkit.Messaging
         Task SubscribeAsync(object subscriber);
 
         /// <summary>
+        /// Subscribes an instance to all events declared through implementations of <see cref="IHandleAsync{TMessage}" /> asynchronous.
+        /// </summary>
+        /// <param name="subscriber">The instance to subscribe for event publication.</param>
+        /// <param name="token">The <see cref="CancellationToken"/>.</param>
+        /// <returns></returns>
+        Task SubscribeAsync(object subscriber, CancellationToken token);
+
+        /// <summary>
         ///   Unsubscribe the instance from all events asynchronous.
         /// </summary>
         /// <param name = "subscriber">The instance to unsubscribe.</param>
         Task UnsubscribeAsync(object subscriber);
+
+        /// <summary>
+        ///   Unsubscribe the instance from all events asynchronous.
+        /// </summary>
+        /// <param name = "subscriber">The instance to unsubscribe.</param>
+        /// <param name="token">The <see cref="CancellationToken"/>.</param>
+        Task UnsubscribeAsync(object subscriber, CancellationToken token);
 
         /// <summary>
         ///   Publishes a message on the current thread asynchronous.
@@ -34,16 +50,12 @@ namespace MToolkit.Messaging
         /// <param name = "message">The message instance.</param>
         Task PublishAsync(object message);
 
-        /// <summary>
-        /// Publishes a message on a background thread asynchronous.
-        /// </summary>
-        /// <param name = "message">The message instance.</param>
-        Task PublishOnBackgroundThreadAsync(object message);
 
         /// <summary>
-        /// Publishes a message on the UI thread asynchronous.
+        ///   Publishes a message on the current thread asynchronous.
         /// </summary>
         /// <param name = "message">The message instance.</param>
-        Task PublishOnUIThreadAsync(object message);
+        /// <param name="token">The <see cref="CancellationToken"/>.</param>
+        Task PublishAsync(object message, CancellationToken token);
     }
 }

@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MToolkit
 {
@@ -47,24 +51,6 @@ namespace MToolkit
         }
 
         /// <summary>
-        ///     Adds all the items of the collection to the <paramref name="source" /> collection.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source">The source collection.</param>
-        /// <param name="itemsToAdd">The items to add.</param>
-        public static void AddRange<T>(this IList<T> source, IList<T> itemsToAdd)
-        {
-            if (source == null || itemsToAdd == null)
-            {
-                return;
-            }
-            foreach (var item in itemsToAdd)
-            {
-                source.Add(item);
-            }
-        }
-
-        /// <summary>
         ///     Executes the <paramref name="action" /> with each item in <paramref name="items" />.
         /// </summary>
         /// <typeparam name="T">The enumerable item's type.</typeparam>
@@ -76,6 +62,87 @@ namespace MToolkit
             {
                 action(item);
             }
+        }
+        /// <summary>
+        /// Executes the <paramref name="body" /> function for each element in the <paramref name="source" /> enumeration, asynchronous.
+        /// </summary>
+        /// <typeparam name="T">The type of objects with in the enumeration</typeparam>
+        /// <param name="source">The enumeration to iterate.</param>
+        /// <param name="body">The function to be executed when iterating.</param>
+        /// <param name="token">The <see cref="CancellationToken"/>.</param>
+        /// <returns>An <see cref="Task"/> that can be awaitable.</returns>
+        public static async Task ForEachAsync<T>(this IEnumerable<T> source, Func<T, Task> body, CancellationToken token)
+        {
+            await ForEachAsync(source, Math.Max(1, Environment.ProcessorCount - 1), body, token);
+        }
+
+        /// <summary>
+        /// Executes the <paramref name="body" /> function for each element in the <paramref name="source" /> enumeration, asynchronous.
+        /// </summary>
+        /// <typeparam name="T">The type of objects with in the enumeration</typeparam>
+        /// <param name="source">The enumeration to iterate.</param>
+        /// <param name="body">The function to be executed when iterating.</param>
+        /// <param name="token">The <see cref="CancellationToken"/>.</param>
+        /// <returns>An <see cref="Task"/> that can be awaitable.</returns>
+        public static async Task ForEachAsync<T>(this IEnumerable<T> source, Func<T, CancellationToken, Task> body, CancellationToken token)
+        {
+            await ForEachAsync(source, Math.Max(1, Environment.ProcessorCount - 1), body, token);
+        }
+
+        /// <summary>
+        /// Executes the <paramref name="body"/> function for each element in the <paramref name="source"/> enumeration, asynchronous.
+        /// </summary>
+        /// <typeparam name="T">The type of objects with in the enumeration</typeparam>
+        /// <param name="source">The enumeration to iterate.</param>
+        /// <param name="parallelCount">how many iterations runs at the same time.</param>
+        /// <param name="body">The function to be executed when iterating.</param>
+        /// <param name="token">The <see cref="CancellationToken"/>.</param>
+        /// <returns>An <see cref="Task"/> that can be awaitable.</returns>
+        public static async Task ForEachAsync<T>(this IEnumerable<T> source, int parallelCount, Func<T, Task> body, CancellationToken token)
+        {
+            //return await Task.WhenAll(
+            var enumerable = Partitioner.Create(source)
+                                        .GetPartitions(parallelCount)
+                                        .Select(partition =>
+                                                Task.Run(async () =>
+                                                {
+                                                    using (partition)
+                                                    {
+                                                        while (partition.MoveNext())
+                                                        {
+                                                            await body(partition.Current);
+                                                        }
+                                                    }
+                                                }, token));
+            await Task.WhenAll(enumerable);
+        }
+
+        /// <summary>
+        /// Executes the <paramref name="body"/> function for each element in the <paramref name="source"/> enumeration, asynchronous.
+        /// </summary>
+        /// <typeparam name="T">The type of objects with in the enumeration</typeparam>
+        /// <param name="source">The enumeration to iterate.</param>
+        /// <param name="parallelCount">how many iterations runs at the same time.</param>
+        /// <param name="body">The function to be executed when iterating.</param>
+        /// <param name="token">The <see cref="CancellationToken"/>.</param>
+        /// <returns>An <see cref="Task"/> that can be awaitable.</returns>
+        public static async Task ForEachAsync<T>(this IEnumerable<T> source, int parallelCount, Func<T, CancellationToken, Task> body, CancellationToken token)
+        {
+            //return await Task.WhenAll(
+            var enumerable = Partitioner.Create(source)
+                                        .GetPartitions(parallelCount)
+                                        .Select(partition =>
+                                                Task.Run(async () =>
+                                                {
+                                                    using (partition)
+                                                    {
+                                                        while (partition.MoveNext())
+                                                        {
+                                                            await body(partition.Current, token);
+                                                        }
+                                                    }
+                                                }, token));
+            await Task.WhenAll(enumerable);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace MToolkit
 {
@@ -129,6 +130,9 @@ namespace MToolkit
         /// <param name="add">The add.</param>
         /// <param name="remove">The remove.</param>
         /// <param name="action">The action.</param>
+        /// var subscription = this.WeakSubscribe(h => viewModel.PropertyChanged += h,
+        ///                                       h => viewModel.PropertyChanged -= h,
+        ///                                       (s, e) => s.HandleEvent(e));
         public static WeakEventSubscription<EventHandler<TArgs>> WeakSubscribe<T, TArgs>(this T subscriber,
                                                                                          Action<EventHandler<TArgs>> add,
                                                                                          Action<EventHandler<TArgs>>
@@ -152,10 +156,41 @@ namespace MToolkit
         /// <param name="add">The add.</param>
         /// <param name="remove">The remove.</param>
         /// <param name="action">The action.</param>
+        /// <example>
+        /// var subscription = this.WeakSubscribe(h => viewModel.PropertyChanged += h,
+        ///                                       h => viewModel.PropertyChanged -= h,
+        ///                                       (s, e) => s.HandleEvent(e));
+        /// </example>
         public static WeakEventSubscription<EventHandler> WeakSubscribe<T>(this T subscriber,
                                                                            Action<EventHandler> add,
                                                                            Action<EventHandler> remove,
                                                                            Action<T, EventArgs> action)
+            where T : class
+        {
+
+            return WeakSubscribe(subscriber,
+                                 h => (o, e) => h(o, e),
+                                 //This is a workaround from Rx
+                                 add,
+                                 remove,
+                                 action);
+        }
+
+        /// <summary>
+        ///     this overload is simplified for EventHandlers.
+        /// </summary>
+        /// <typeparam name="T">The type of the T.</typeparam>
+        /// <param name="subscriber">The subscriber.</param>
+        /// <param name="add">The add.</param>
+        /// <param name="remove">The remove.</param>
+        /// <param name="action">The action.</param>
+        /// var subscription = this.WeakSubscribe(h => viewModel.PropertyChanged += h,
+        ///                                       h => viewModel.PropertyChanged -= h,
+        ///                                       (s, e) => s.HandlePropertyChanged(e.PropertyName));
+        public static WeakEventSubscription<PropertyChangedEventHandler> WeakSubscribe<T>(this T subscriber,
+                                                                           Action<PropertyChangedEventHandler> add,
+                                                                           Action<PropertyChangedEventHandler> remove,
+                                                                           Action<T, PropertyChangedEventArgs> action)
             where T : class
         {
             return WeakSubscribe(subscriber,

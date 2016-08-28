@@ -73,5 +73,27 @@ namespace MToolkit
         {
             return date?.ChangeToUnspecifiedKind();
         }
+
+        /// <summary>
+        /// Compares the instance with the otherDate date and returns the earlier date value
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="otherDate"></param>
+        /// <returns></returns>
+        public static DateTime Min(this DateTime date, DateTime otherDate)
+        {
+            return date < otherDate ? date : otherDate;
+        }
+
+        /// <summary>
+        /// Compares the instance with the otherDate date and returns the later date value
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="otherDate"></param>
+        /// <returns></returns>
+        public static DateTime Max(this DateTime date, DateTime otherDate)
+        {
+            return date > otherDate ? date : otherDate;
+        }
     }
 }

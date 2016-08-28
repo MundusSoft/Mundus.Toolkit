@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
@@ -52,6 +53,17 @@ namespace MToolkit.Threading
         /// Executes the function on the UI thread asynchronously.
         /// </summary>
         /// <param name="function">The function to execute.</param>
+        /// <param name="token">The <see cref="System.Threading.CancellationToken"/> that will be passed into the <paramref name="function"/></param>
+        /// <returns>The running <see cref="System.Threading.Tasks.Task"/>.</returns>
+        public async Task InvokeOnUIThreadAsync(Func<Task> function, CancellationToken token)
+        {
+            await InvokeOnUIThreadAsync(function, DispatcherPriority.Normal, token);
+        }
+
+        /// <summary>
+        /// Executes the function on the UI thread asynchronously.
+        /// </summary>
+        /// <param name="function">The function to execute.</param>
         /// <param name="priority">The <see cref="DispatcherPriority"/> the <paramref name="function"/> will be run.</param>
         /// <returns>
         /// A <see cref="System.Threading.Tasks.Task" /> for the running operation.
@@ -61,6 +73,22 @@ namespace MToolkit.Threading
             ValidateDispatcher();
             var execPriority = GetDispatcherPriority(priority);
             await dispatcher.Invoke(function, execPriority);
+        }
+
+        /// <summary>
+        /// Executes the function on the UI thread asynchronously.
+        /// </summary>
+        /// <param name="function">The function to execute.</param>
+        /// <param name="priority">The <see cref="DispatcherPriority"/> the <paramref name="function"/> will be run.</param>
+        /// <param name="token">The <see cref="System.Threading.CancellationToken"/> that will be passed into the <paramref name="function"/></param>
+        /// <returns>
+        /// A <see cref="System.Threading.Tasks.Task" /> for the running operation.
+        /// </returns>
+        public async Task InvokeOnUIThreadAsync(Func<Task> function, DispatcherPriority priority, CancellationToken token)
+        {
+            ValidateDispatcher();
+            var execPriority = GetDispatcherPriority(priority);
+            await dispatcher.Invoke(function, execPriority, token);
         }
 
         #endregion
