@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MundusSoft")]
-[assembly: AssemblyProduct("MToolkit")]
+[assembly: AssemblyProduct("Mundus.Toolkit")]
 [assembly: AssemblyCopyright("Copyright © 2016 MundusSoft all rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
