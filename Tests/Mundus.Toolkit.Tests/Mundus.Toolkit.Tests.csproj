@@ -74,11 +74,11 @@
       <Project>{3573CC74-0076-4D90-A08B-22FACBB0E389}</Project>
       <Name>MToolkit.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MToolkit.NET\MToolkit.Net.csproj">
+    <ProjectReference Include="..\..\Mundus.Toolkit.NET\Mundus.Toolkit.Net.csproj">
       <Project>{6074711F-E082-472D-94EE-3AF9BF3D725B}</Project>
       <Name>MToolkit.Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MToolkit\MToolkit.csproj">
+    <ProjectReference Include="..\..\Mundus.Toolkit\Mundus.Toolkit.csproj">
       <Project>{F1BE0B49-58E8-4F65-A767-5027CADEACFF}</Project>
       <Name>MToolkit</Name>
     </ProjectReference>

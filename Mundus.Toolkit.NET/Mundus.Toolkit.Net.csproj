@@ -98,7 +98,7 @@
       <Project>{3573CC74-0076-4D90-A08B-22FACBB0E389}</Project>
       <Name>MToolkit.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MToolkit\MToolkit.csproj">
+    <ProjectReference Include="..\Mundus.Toolkit\Mundus.Toolkit.csproj">
       <Project>{F1BE0B49-58E8-4F65-A767-5027CADEACFF}</Project>
       <Name>MToolkit</Name>
     </ProjectReference>
